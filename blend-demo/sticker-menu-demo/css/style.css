@@ -1,0 +1,148 @@
+/* Sticker menu demo — the "fly-over" optical effect
+   White text + mix-blend-mode: difference inverts whatever is
+   underneath each glyph: white background -> black text,
+   photo -> inverted photo colors (the sticker look). */
+
+:root {
+  --stage-h: 440px;
+  --loop-speed: 7s;
+  --ink: #18181b;
+  --paper: #ffffff;
+  --muted: #d4d4d8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f4f4f5;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.demo {
+  width: min(960px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Stage isolates the blend: without isolation, the text would
+   blend with the page background instead of the sliding image. */
+.stage {
+  position: relative;
+  height: var(--stage-h);
+  border-radius: 16px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--paper);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .12);
+}
+
+/* Endless right-to-left loop: five slides, the sequence repeated
+   twice side by side; track translates -50% so the wrap point is
+   seamless. */
+.track {
+  position: absolute;
+  inset: 130px auto auto 0;  /* strip sits low: top of stage stays white */
+  height: 475px;             /* 303px-wide cards at the image's 620:972 aspect */
+  display: flex;
+  animation: slide var(--loop-speed) linear infinite;
+}
+
+.stage.paused .track { animation-play-state: paused; }
+
+.slide {
+  flex: none;
+  height: 100%;
+  width: 303px;
+  margin-right: 13px;   /* white gutter between cards */
+  border-radius: 12px;
+  background: center / contain no-repeat;
+}
+
+.s1 { background-image: url("../assets/image1.webp"); }
+.s2 { background-image: url("../assets/image2.webp"); }
+.s3 { background-image: url("../assets/image3.webp"); }
+.s4 { background-image: url("../assets/image4.webp"); }
+.s5 { background-image: url("../assets/image5.webp"); }
+
+@keyframes slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.menu {
+  position: absolute;   /* no z-index: a stacking context here would
+                           isolate the links' blend from the track below */
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  /* top items on white, lower items cross the photos */
+  gap: 8px;
+  padding-top: 57px;
+  padding-left: 32px;
+  pointer-events: none;     /* let clicks pass except on links */
+}
+
+/* Text attributes mirror the xTool page's computed styles:
+   Inter Tight SemiBold (= font-weight 600), 15px left padding,
+   relative positioning, left alignment, bidi isolation. */
+.menu a {
+  position: relative;
+  unicode-bidi: isolate;
+  text-align: left;
+  padding-left: 15px;
+  color: #fff;              /* white is required: |255 - bg| per channel */
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  max-width: 165px;
+  text-decoration: none;
+  width: fit-content;
+  pointer-events: auto;
+  transition: transform .2s ease-out;
+}
+
+.menu a:hover { transform: translateX(6px); }
+
+/* Controls */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.controls button {
+  border: 1px solid var(--muted);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.controls button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.controls button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Live CSS readout */
+.code {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  background: var(--ink);
+  color: #e4e4e7;
+  padding: 12px 16px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+/* Accessibility: honor reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; transform: translateX(30%); }
+  .menu a { transition: none; }
+}

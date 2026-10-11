@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticker menu — mix-blend-mode: difference demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="demo">
+  <div class="stage" id="stage">
+    <div class="track" aria-hidden="true">
+      <div class="slide s1"></div>
+      <div class="slide s2"></div>
+      <div class="slide s3"></div>
+      <div class="slide s4"></div>
+      <div class="slide s5"></div>
+      <div class="slide s1"></div>
+      <div class="slide s2"></div>
+      <div class="slide s3"></div>
+      <div class="slide s4"></div>
+      <div class="slide s5"></div>
+    </div>
+    <nav class="menu" id="menu" aria-label="Product features">
+      <a href="#">Multi-Material Printing</a>
+      <a href="#">Pixel-Scan&trade; Vision System</a>
+      <a href="#">Advanced AI Software</a>
+      <a href="#">Cross-Device Synergy</a>
+      <a href="#">SmartCycle&trade; 2.0 Maintenance</a>
+      <a href="#">Air &amp; Ink Safety</a>
+    </nav>
+  </div>
+
+  <div class="controls" id="seg" role="group" aria-label="Blend mode">
+    <button type="button" data-m="normal">normal</button>
+    <button type="button" data-m="difference" class="on" aria-pressed="true">difference</button>
+    <button type="button" data-m="exclusion">exclusion</button>
+    <button type="button" id="pause">Pause loop</button>
+  </div>
+
+  <pre class="code" id="code" aria-live="polite"></pre>
+</main>
+<script src="js/script.js"></script>
+</body>
+</html>
